@@ -1,0 +1,29 @@
+{
+    "name": "lnf-typescript",
+    "version": "1.0.0",
+    "description": "",
+    "homepage": "https://github.com/TheNextUchiha/lnf-typescript#readme",
+    "bugs": {
+        "url": "https://github.com/TheNextUchiha/lnf-typescript/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/TheNextUchiha/lnf-typescript.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "mongoose": "^8.16.4"
+    },
+    "devDependencies": {
+        "@types/node": "^24.0.15",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
+}
