@@ -1,15 +1,19 @@
-import mongoose from 'mongoose';
-import ObjectID from 'mongodb';
+import mongoose, { Model, Schema, Types } from 'mongoose';
 
-var QRSchema = new mongoose.Schema({
+interface IQRCode {
+    userID: Types.ObjectId;
+    qr: [string];
+}
+
+const QRSchema = new Schema<IQRCode>({
     userID: {
-        type: ObjectID,
+        type: Schema.Types.ObjectId,
         // required: true,
         unique: true,
     },
     qr: [],
 });
 
-var QR = mongoose.model('UserDetails', QRSchema, 'user_details');
+const QR: Model<IQRCode> = mongoose.model<IQRCode>('UserDetails', QRSchema, 'user_details');
 
-module.exports = { QR };
+export { QR };

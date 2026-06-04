@@ -1,15 +1,30 @@
-import { ObjectId } from 'mongodb';
-
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose, { Model, Schema, Types } from 'mongoose';
 import crypto from 'crypto';
-import format from 'biguint-format';
 
-let defMobileNum = 0;
+interface IUserDetails {
+    userID: Types.ObjectId;
+    name: string;
+    mobileNum: string;
+    state: string;
+    address: string;
+    sec_que: number;
+    sec_ans: string;
+    qr: string;
+    qrcount: number;
+    qrcountprev: number;
+}
 
-var UserDetailsSchema = new mongoose.Schema({
+const randomPhoneNumber = () => {
+    let num = '';
+
+    while (num.length < 10) num += Math.floor(Math.random() * 10).toString();
+
+    return num;
+};
+
+const UserDetailsSchema = new Schema<IUserDetails>({
     userID: {
-        type: ObjectId,
+        type: Schema.Types.ObjectId,
         // required: true,
         unique: true,
     },
@@ -19,11 +34,11 @@ var UserDetailsSchema = new mongoose.Schema({
         trim: true,
         minlegth: 1,
     },
-    mobilenum: {
-        type: Number,
+    mobileNum: {
+        type: String,
         // required: true,
         unique: true,
-        default: format(crypto.randomBytes(4), 'dec'),
+        default: () => randomPhoneNumber(),
         minlength: 10,
         maxlength: 10,
     },
@@ -62,29 +77,6 @@ var UserDetailsSchema = new mongoose.Schema({
     },
 });
 
-// UserSchema methods are used to apply methods on an instance of a User object.
+const UserDetails: Model<IUserDetails> = mongoose.model<IUserDetails>('UserDetails', UserDetailsSchema, 'user_details');
 
-// UserSchema.methods.comparePassword = (password, hash) => {
-//     return bcrypt.compareSync(password, hash);
-// };
-
-// UserSchema statics is used to apply a method on the entire User Class/Schema.
-
-UserDetailsSchema.pre('save', async function (next) {
-    const user = this;
-
-    if (user.isModified('password')) {
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, resHash) => {
-                user.password = resHash;
-                next();
-            });
-        });
-    } else {
-        next();
-    }
-});
-
-var UserDetails = mongoose.model('UserDetails', UserDetailsSchema, 'user_details');
-
-module.exports = { UserDetails };
+export { UserDetails };

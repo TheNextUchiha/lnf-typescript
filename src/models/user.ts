@@ -2,7 +2,14 @@ import mongoose, { Document, Model } from 'mongoose';
 import { isEmail } from 'validator';
 import bcrypt from 'bcryptjs';
 
-const UserSchema = new mongoose.Schema({
+interface IUser {
+    email: string;
+    username: string;
+    password: string;
+    counter: number;
+}
+
+const UserSchema = new mongoose.Schema<IUser>({
     email: {
         type: String,
         required: true,
@@ -53,6 +60,7 @@ UserSchema.pre('save', async function (next) {
     next();
 });
 
-const User = mongoose.model('User', UserSchema, 'users');
+const User: Model<IUser> = mongoose.model<IUser>('User', UserSchema, 'users');
 
-module.exports = { User };
+export { User };
+export type { IUser };
