@@ -1,39 +1,18 @@
-const express = require('express');
+import express from 'express';
+
+import { getForgotPassword, getIndex, postForgotPassword } from '../controllers/index.js';
 
 const router = express.Router();
-
-import { User } from './../models/user.js';
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv/config');
 }
 
 // -----> GET Routes <-----
-router.get('/', (req, res) => {
-    res.render('landing');
-});
-
-router.get('/forgot', (req, res) => {
-    res.render('forgot');
-});
+router.get('/', getIndex);
+router.get('/forgot', getForgotPassword);
 
 // -----> POST Routes <-----
-
-router.post('/forgot', async (req, res) => {
-    const { email } = req.body;
-
-    let user;
-
-    try {
-        user = await User.findOne({ email });
-    } catch (err) {
-        return res.render('forgot', {
-            error: true,
-            errorMessage: 'User not Found',
-        });
-    }
-
-    res.redirect('/forgot-verify');
-});
+router.post('/forgot', postForgotPassword);
 
 export default router;

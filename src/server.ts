@@ -8,7 +8,7 @@ const { mongoose } = require('./server/db/mongoose');
 const { NODE_ENV, PORT, MONGO_URI } = process.env;
 
 import index from './routes/index.js';
-import login from './routes/login.js';
+import login from './routes/auth.js';
 import signup from './routes/signup.js';
 import editProfile from './routes/editprofile.js';
 import getUser from './routes/user.js';
