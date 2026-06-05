@@ -1,7 +1,11 @@
+import { ObjectId } from 'mongodb';
+
+import type { Request, Response } from 'express';
+
 import { User } from '../models/user.js';
 import { UserDetails } from '../models/userDetails.js';
 
-async function getEditProfile(req, res) {
+async function getEditProfile(req: Request, res: Response) {
     const { userID } = req.session.user!;
 
     let user;
@@ -20,10 +24,10 @@ async function getEditProfile(req, res) {
     return res.render('editprofile', { user });
 }
 
-async function postEditProfile(req, res) {
+async function postEditProfile(req: Request, res: Response) {
     const { userID } = req.session.user!;
 
-    const body = _.pick(req.body, ['name', 'mobile', 'state', 'address', 'sec_que', 'sec_ans']);
+    const { name, mobile, state, address, sec_que, sec_ans } = req.body;
 
     let user;
 
@@ -39,16 +43,14 @@ async function postEditProfile(req, res) {
     }
 
     if (!user) {
-        body.sec_ans = body.sec_ans.toLowerCase();
-
         const userDetails = new UserDetails({
             userID: user._id,
-            name: body.name,
-            mobilenum: body.mobile,
-            state: body.state,
-            address: body.address,
-            sec_que: body.sec_que,
-            sec_ans: body.sec_ans.toLowerCase(),
+            name: name,
+            mobilenum: mobile,
+            state: state,
+            address: address,
+            sec_que: sec_que,
+            sec_ans: sec_ans.toLowerCase(),
         });
 
         try {
@@ -58,7 +60,7 @@ async function postEditProfile(req, res) {
         }
 
         try {
-            await User.findOneAndUpdate(userID, {
+            await User.findOneAndUpdate(ObjectId.createFromHexString(userID), {
                 $inc: {
                     counter: 1,
                 },
@@ -79,18 +81,16 @@ async function postEditProfile(req, res) {
         return res.redirect('editprofile');
     }
 
-    body.sec_ans = body.sec_ans.toLowerCase();
-
     if (!userDetails) {
         return;
     }
 
-    userDetails.name = body.name ? body.name : userDetails.name;
-    userDetails.mobileNum = body.mobile ? body.mobile : userDetails.mobileNum;
-    userDetails.state = body.state ? body.state : userDetails.state;
-    userDetails.address = body.address ? body.address : userDetails.address;
-    userDetails.sec_que = body.sec_que ? body.sec_que : userDetails.sec_que;
-    userDetails.sec_ans = body.sec_ans ? body.sec_ans : userDetails.sec_ans;
+    userDetails.name = name ? name : userDetails.name;
+    userDetails.mobileNum = mobile ? mobile : userDetails.mobileNum;
+    userDetails.state = state ? state : userDetails.state;
+    userDetails.address = address ? address : userDetails.address;
+    userDetails.sec_que = sec_que ? sec_que : userDetails.sec_que;
+    userDetails.sec_ans = sec_ans ? sec_ans.toLowerCase() : userDetails.sec_ans;
 
     try {
         await userDetails.save();

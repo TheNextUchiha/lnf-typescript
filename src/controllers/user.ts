@@ -1,12 +1,15 @@
-import { transporter } from '../config/nodemailer.js';
+import type { Request, Response } from 'express';
+
 import { User } from '../models/user.js';
 import { UserDetails } from '../models/userDetails.js';
 
+import { transporter } from '../config/nodemailer.js';
+
 if (process.env.NODE_ENV !== 'production') {
-    require('dotenv/config');
+    await import('dotenv/config');
 }
 
-async function getUserDetailById(req, res) {
+async function getUserDetailById(req: Request, res: Response) {
     const userID = req.params.UserID;
 
     let user, userDetails;

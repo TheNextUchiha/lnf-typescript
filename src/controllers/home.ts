@@ -1,8 +1,10 @@
+import type { Request, Response } from 'express';
+
 import { User } from '../models/user.js';
 import { UserDetails } from '../models/userDetails.js';
 
-async function getHome(req, res) {
-    const userID = req.session.user.userID;
+async function getHome(req: Request, res: Response) {
+    const { userID } = req.session.user!;
 
     let user, userDetails;
 
@@ -43,8 +45,8 @@ async function getHome(req, res) {
     });
 }
 
-async function generateQR(req, res) {
-    const { userID } = req.session.user;
+async function generateQR(req: Request, res: Response) {
+    const { userID } = req.session.user!;
 
     let userDetails;
 
@@ -78,9 +80,9 @@ async function generateQR(req, res) {
     return res.render('qr', { src: userDetails.qr });
 }
 
-async function logoutUser(req, res) {
+async function logoutUser(req: Request, res: Response) {
     try {
-        await req.session.destroy();
+        delete req.session.user;
 
         res.clearCookie('cookie');
     } catch (err) {

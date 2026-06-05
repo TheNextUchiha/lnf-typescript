@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { NODE_ENV } = process.env;
 
-if (NODE_ENV !== 'production') require('dotenv/config');
+if (NODE_ENV !== 'production') import('dotenv/config');
 
 const { MONGO_URI } = process.env;
 
@@ -21,4 +21,4 @@ try {
     console.log('Error while connecting Online Mongo.\nSwitching to Offline Mongo.\nError for reference:', err);
 }
 
-module.exports = { mongoose };
+export { mongoose };

@@ -1,20 +1,27 @@
+// TODO: Fix why the ev variables are not imported. Must be due to missing config.
+if (process.env.NODE_ENV !== 'production') import('dotenv/config');
+
 import express from 'express';
 import favicon from 'serve-favicon';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const { mongoose } = require('./server/db/mongoose');
+import { mongoose } from './db/mongoose.js';
 
-const { NODE_ENV, PORT, MONGO_URI } = process.env;
+const { PORT, MONGO_URI } = process.env;
 
 import index from './routes/index.js';
-import login from './routes/auth.js';
-import signup from './routes/signup.js';
-import editProfile from './routes/editprofile.js';
-import getUser from './routes/user.js';
+import auth from './routes/auth.js';
+import profile from './routes/editprofile.js';
+import user from './routes/user.js';
 import home from './routes/home.js';
 
-if (NODE_ENV !== 'production') require('dotenv/config');
+const getDirname = (metaUrl: string) => {
+    const filename = fileURLToPath(metaUrl);
+    return path.dirname(filename);
+};
 
 const port = PORT;
 
@@ -26,10 +33,10 @@ const sessionOptions = { mongoUrl: MONGO_URI || '', collectionName: 'sessions' }
 app.set('view engine', 'hbs');
 
 // ----> Express Middle-wares <-----
-app.use(favicon(__dirname + '/public/icons/favicon.ico')); // To serve Favicon to the client
+app.use(favicon(getDirname(import.meta.url) + '/public/icons/favicon.ico')); // To serve Favicon to the client
 app.use(express.urlencoded({ extended: false })); // To Parse URL data
 app.use(express.json()); // To Parse JSON data
-app.use(express.static(__dirname + '/views')); // To include static HTML pages
+app.use(express.static(getDirname(import.meta.url) + '/views')); // To include static HTML pages
 app.use(
     session({
         secret: 'bruhbruhbruh',
@@ -45,10 +52,9 @@ app.use(
 
 // -----> Routes <-----
 app.use(index);
-app.use(login);
-app.use(signup);
-app.use(editProfile);
-app.use(getUser);
+app.use(auth);
+app.use(profile);
+app.use(user);
 app.use(home);
 
 /*

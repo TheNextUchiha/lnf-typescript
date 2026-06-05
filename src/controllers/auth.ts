@@ -1,20 +1,22 @@
 import bcrypt from 'bcryptjs';
 
+import type { Request, Response } from 'express';
+
 import { User } from '../models/user.js';
 
 const comparePassword = (plain: string, hashed: string): boolean => {
     return bcrypt.compareSync(plain, hashed);
 };
 
-async function getLogin(req, res) {
+async function getLogin(req: Request, res: Response) {
     return res.render('login');
 }
 
-async function getSignUp(req, res) {
+async function getSignUp(req: Request, res: Response) {
     return res.render('signup');
 }
 
-async function loginUser(req, res) {
+async function loginUser(req: Request, res: Response) {
     try {
         const { username, password } = req.body;
 
@@ -41,7 +43,7 @@ async function loginUser(req, res) {
     }
 }
 
-async function signUpUser(req, res) {
+async function signUpUser(req: Request, res: Response) {
     const { email, username, password } = req.body;
 
     const user = new User({ username: username.toLowerCase(), password, email });

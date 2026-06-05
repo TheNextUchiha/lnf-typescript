@@ -1,5 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import { isEmail } from 'validator';
+import validator from 'validator';
 import bcrypt from 'bcryptjs';
 
 interface IUser {
@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema<IUser>({
         minlength: 1,
         unique: true,
         validate: {
-            validator: (value: string) => isEmail(value),
+            validator: (value: string) => validator.isEmail(value),
             message: '{VALUE} is not a valid email.',
         },
     },

@@ -1,14 +1,16 @@
+import type { Request, Response } from 'express';
+
 import { User } from '../models/user.js';
 
-async function getIndex(req, res) {
+async function getIndex(req: Request, res: Response) {
     return res.render('landing');
 }
 
-async function getForgotPassword(req, res) {
+async function getForgotPassword(req: Request, res: Response) {
     return res.render('forgot');
 }
 
-async function postForgotPassword(req, res) {
+async function postForgotPassword(req: Request, res: Response) {
     const { email } = req.body;
 
     let user;
