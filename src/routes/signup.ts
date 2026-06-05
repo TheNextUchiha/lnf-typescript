@@ -9,19 +9,16 @@ router.get('/signup', (req, res) => {
     res.render('signup');
 });
 
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
     const body = _.pick(req.body, ['email', 'username', 'password']);
     body.username = body.username.toLowerCase();
 
     const user = new User(body);
 
-    user.save((err, user) => {
-        if (!err) {
-            res.render('login', {
-                error: true,
-                errorMessage: 'Log in using the credentials.',
-            });
-        } else if (err.code === 11000 && err.keyPattern.username > 0) {
+    try {
+        await user.save();
+    } catch (err: any) {
+        if (err.code === 11000 && err.keyPattern.username > 0) {
             res.render('signup', {
                 error: true,
                 errorMessage: 'Username already taken.',
@@ -38,7 +35,12 @@ router.post('/signup', (req, res) => {
                 errorMessage: 'An unknown error occured.',
             });
         }
+    }
+
+    return res.render('login', {
+        error: true,
+        errorMessage: 'Log in using the credentials.',
     });
 });
 
-module.exports = router;
+export default router;

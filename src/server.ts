@@ -1,18 +1,18 @@
-const express = require('express');
-const favicon = require('serve-favicon');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
+import express from 'express';
+import favicon from 'serve-favicon';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 const { mongoose } = require('./server/db/mongoose');
 
 const { NODE_ENV, PORT, MONGO_URI } = process.env;
 
-const index = require('./routes/index');
-const login = require('./routes/login');
-const signup = require('./routes/signup');
-const editProfile = require('./routes/editprofile');
-const getUser = require('./routes/user');
-const home = require('./routes/home');
+import index from './routes/index.js';
+import login from './routes/login.js';
+import signup from './routes/signup.js';
+import editProfile from './routes/editprofile.js';
+import getUser from './routes/user.js';
+import home from './routes/home.js';
 
 if (NODE_ENV !== 'production') require('dotenv/config');
 
@@ -20,7 +20,7 @@ const port = PORT;
 
 const app = express();
 
-const sessionOptions = { mongoUrl: MONGO_URI, collectionName: 'sessions' };
+const sessionOptions = { mongoUrl: MONGO_URI || '', collectionName: 'sessions' };
 
 //Handlebars Setup
 app.set('view engine', 'hbs');
@@ -59,13 +59,6 @@ app.use((req, res, next) => {
 });
 
 */
-
-//App initialization at Express server on a specified port no.
-
-// var server = app.listen(8080, () => {            // For RedHat OpenShift
-//     var port = server.address().port;
-//     console.log(`Server is up at port ${port}`);
-// });
 
 app.listen(port, () => {
     console.log('Server up at port: ' + port);

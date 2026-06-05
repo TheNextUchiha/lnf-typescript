@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 const authenticate = (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -15,4 +15,4 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-module.exports = { authenticate };
+export { authenticate };

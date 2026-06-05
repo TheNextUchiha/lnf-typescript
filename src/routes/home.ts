@@ -1,11 +1,10 @@
-const express = require('express');
-const { ObjectId } = require('mongodb');
+import express, { Router } from 'express';
 
-const router = express.Router();
+const router = Router();
 
-const { authenticate } = require('./../middlewares/authenticate');
-const { User } = require('./../server/models/user');
-const { UserDetails } = require('./../server/models/userDetails');
+import { authenticate } from './../middlewares/authenticate.js';
+import { User } from './../models/user.js';
+import { UserDetails } from './../models/userDetails.js';
 
 router.get('/generate-qr', authenticate, async (req, res) => {
     const { userID } = req.session.user;
@@ -22,7 +21,7 @@ router.get('/generate-qr', authenticate, async (req, res) => {
                         userID +
                         '&size=600x600&margin=10',
                 },
-            }
+            },
         );
     } catch (err) {
         console.log('Error: ', err);
@@ -31,13 +30,17 @@ router.get('/generate-qr', authenticate, async (req, res) => {
 
     try {
         userDetails = await UserDetails.findOne({ userID });
-
-        return res.render('qr', {
-            src: userDetails.qr,
-        });
     } catch (err) {
         return res.redirect('home');
     }
+
+    if (!userDetails) {
+        return res.redirect('home');
+    }
+
+    return res.render('qr', {
+        src: userDetails.qr,
+    });
 });
 
 router.get('/home', authenticate, async (req, res) => {
@@ -51,7 +54,7 @@ router.get('/home', authenticate, async (req, res) => {
         return res.redirect('login');
     }
 
-    if (user.counter === 0) {
+    if (!user) {
         return res.redirect('editprofile');
     }
 
@@ -64,22 +67,22 @@ router.get('/home', authenticate, async (req, res) => {
     }
 
     try {
-        try {
-            userDetails = await UserDetails.findOne({ userID });
-        } catch (err) {
-            console.log('error fetching userdetails', err);
-            return res.redirect('login');
-        }
-
-        return res.render('home', {
-            name: userDetails.name,
-            mobilenum: userDetails.mobilenum,
-            address: userDetails.address,
-            email: user.email,
-        });
+        userDetails = await UserDetails.findOne({ userID });
     } catch (err) {
+        console.log('error fetching userdetails', err);
         return res.redirect('login');
     }
+
+    if (!userDetails) {
+        return res.redirect('home');
+    }
+
+    return res.render('home', {
+        name: userDetails.name,
+        mobilenum: userDetails.mobileNum,
+        address: userDetails.address,
+        email: user.email,
+    });
 });
 
 router.get('/logout', (req, res) => {
@@ -96,4 +99,4 @@ router.get('/logout', (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

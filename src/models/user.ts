@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { isEmail } from 'validator';
 import bcrypt from 'bcryptjs';
 

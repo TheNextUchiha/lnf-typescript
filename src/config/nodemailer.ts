@@ -14,4 +14,4 @@ const transporter = mailer.createTransport({
     },
 });
 
-module.exports = { transporter };
+export { transporter };

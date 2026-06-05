@@ -1,9 +1,13 @@
-const express = require('express');
-const _ = require('lodash');
+import bcrypt from 'bcryptjs';
+import express from 'express';
 
 const router = express.Router();
 
-const { User } = require('./../server/models/user');
+import { User } from './../models/user.js';
+
+const comparePassword = (plain: string, hashed: string): boolean => {
+    return bcrypt.compareSync(plain, hashed);
+};
 
 router.get('/login', (req, res) => {
     res.render('login');
@@ -11,20 +15,20 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        const body = _.pick(req.body, ['username', 'password']);
+        const { username, password } = req.body;
 
         const user = await User.findOne({
-            username: body.username.toLowerCase(),
+            username: username.toLowerCase(),
         });
 
         if (!user) {
             return res.redirect('/');
         }
 
-        if (user.comparePassword(body.password, user.password)) {
+        if (comparePassword(password, user.password)) {
             req.session.user = {
                 username: user.username,
-                userID: user._id,
+                userID: user._id.toString(),
             };
 
             return res.redirect('/home');
@@ -32,10 +36,8 @@ router.post('/login', async (req, res) => {
             return res.redirect(400, '/');
         }
     } catch (err) {
-        console.log('---------err: ', err);
-
         return res.status(500).send();
     }
 });
 
-module.exports = router;
+export default router;

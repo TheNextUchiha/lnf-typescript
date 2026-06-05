@@ -1,13 +1,12 @@
-const express = require('express');
-const _ = require('lodash');
-const { ObjectId } = require('mongodb');
+import express from 'express';
+import { ObjectId } from 'mongodb';
 
 const router = express.Router();
 
-const { authenticate } = require('../middlewares/authenticate');
-const { User } = require('../models/user');
-const { UserDetails } = require('../models/userDetails');
-const { transporter } = require('./../utils/nodemailer');
+import { authenticate } from '../middlewares/authenticate.js';
+import { User } from '../models/user.js';
+import { UserDetails } from '../models/userDetails.js';
+import { transporter } from './../config/nodemailer.js';
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv/config');
@@ -38,6 +37,10 @@ router.get('/users/:UserID', async (req, res) => {
             error: err,
             message: 'Error fetching the user details.',
         });
+    }
+
+    if (!userDetails) {
+        return;
     }
 
     userDetails.qrcount += 1;
@@ -91,7 +94,7 @@ router.get('/users/:UserID', async (req, res) => {
 
     return res.render('qr-result', {
         name: userDetails.name,
-        mobilenum: userDetails.mobilenum,
+        mobilenum: userDetails.mobileNum,
         address: userDetails.address,
         email: user.email,
     });
@@ -142,4 +145,4 @@ router.get('/users/:UserID', async (req, res) => {
     // });
 });
 
-module.exports = router;
+export default router;

@@ -1,14 +1,13 @@
-const express = require('express');
-const _ = require('lodash');
+import express from 'express';
 
 const router = express.Router();
 
-const { authenticate } = require('./../middlewares/authenticate');
-const { User } = require('./../server/models/user');
-const { UserDetails } = require('./../server/models/userDetails');
+import { authenticate } from './../middlewares/authenticate.js';
+import { User, type IUser } from './../models/user.js';
+import { UserDetails } from './../models/userDetails.js';
 
 router.get('/editprofile', authenticate, async (req, res) => {
-    const { userID } = req.session.user;
+    const { userID } = req.session.user!;
 
     let user;
 
@@ -27,7 +26,7 @@ router.get('/editprofile', authenticate, async (req, res) => {
 });
 
 router.post('/editprofile', authenticate, async (req, res) => {
-    const { userID } = req.session.user;
+    const { userID } = req.session.user!;
 
     const body = _.pick(req.body, ['name', 'mobile', 'state', 'address', 'sec_que', 'sec_ans']);
 
@@ -44,7 +43,7 @@ router.post('/editprofile', authenticate, async (req, res) => {
         });
     }
 
-    if (user.counter === 0) {
+    if (!user) {
         body.sec_ans = body.sec_ans.toLowerCase();
 
         const userDetails = new UserDetails({
@@ -87,12 +86,16 @@ router.post('/editprofile', authenticate, async (req, res) => {
 
     body.sec_ans = body.sec_ans.toLowerCase();
 
-    userDetails.name = userDetails.name ? body.name : body.name;
-    userDetails.mobilenum = userDetails.mobilenum ? body.mobile : body.mobile;
-    userDetails.state = userDetails.state ? body.state : body.state;
-    userDetails.address = userDetails.address ? body.address : body.address;
-    userDetails.sec_que = userDetails.sec_que ? body.sec_que : body.sec_que;
-    userDetails.sec_ans = userDetails.sec_ans ? body.sec_ans : body.sec_ans;
+    if (!userDetails) {
+        return;
+    }
+
+    userDetails.name = body.name ? body.name : userDetails.name;
+    userDetails.mobileNum = body.mobile ? body.mobile : userDetails.mobileNum;
+    userDetails.state = body.state ? body.state : userDetails.state;
+    userDetails.address = body.address ? body.address : userDetails.address;
+    userDetails.sec_que = body.sec_que ? body.sec_que : userDetails.sec_que;
+    userDetails.sec_ans = body.sec_ans ? body.sec_ans : userDetails.sec_ans;
 
     try {
         await userDetails.save();
@@ -102,4 +105,4 @@ router.post('/editprofile', authenticate, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
