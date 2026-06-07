@@ -16,7 +16,8 @@
     "main": "index.js",
     "scripts": {
         "build": "tsc && cpx \"src/public/**/*\" dist/public && cpx \"src/views/**/*\" dist/views",
-        "dev": "tsc -w & cpx \"src/public/**/*\" dist/public -w && cpx \"src/views/**/*\" dist/views -w"
+        "compile": "tsc -w & cpx \"src/public/**/*\" dist/public -w & cpx \"src/views/**/*\" dist/views -w",
+        "dev": "nodemon -r dotenv/config dist/server.js dotenv_config_path=./.env"
     },
     "dependencies": {
         "bcryptjs": "^3.0.2",

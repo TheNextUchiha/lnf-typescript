@@ -5,10 +5,6 @@ import { UserDetails } from '../models/userDetails.js';
 
 import { transporter } from '../config/nodemailer.js';
 
-if (process.env.NODE_ENV !== 'production') {
-    await import('dotenv/config');
-}
-
 async function getUserDetailById(req: Request, res: Response) {
     const userID = req.params.UserID;
 

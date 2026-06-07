@@ -1,6 +1,3 @@
-// TODO: Fix why the ev variables are not imported. Must be due to missing config.
-if (process.env.NODE_ENV !== 'production') import('dotenv/config');
-
 import express from 'express';
 import favicon from 'serve-favicon';
 import session from 'express-session';

@@ -4,10 +4,6 @@ import { getForgotPassword, getIndex, postForgotPassword } from '../controllers/
 
 const router = express.Router();
 
-if (process.env.NODE_ENV !== 'production') {
-    import('dotenv/config');
-}
-
 // -----> GET Routes <-----
 router.get('/', getIndex);
 router.get('/forgot', getForgotPassword);
