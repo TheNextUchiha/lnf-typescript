@@ -87,7 +87,7 @@ async function getUserDetailById(req: Request, res: Response) {
 
     return res.render('qr-result', {
         name: userDetails.name,
-        mobilenum: userDetails.mobileNum,
+        mobilenum: userDetails.mobilenum,
         address: userDetails.address,
         email: user.email,
     });

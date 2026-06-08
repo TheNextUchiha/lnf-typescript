@@ -4,7 +4,7 @@ import crypto from 'crypto';
 interface IUserDetails {
     userID: Types.ObjectId;
     name: string;
-    mobileNum: string;
+    mobilenum: string;
     state: string;
     address: string;
     sec_que: number;
@@ -34,7 +34,7 @@ const UserDetailsSchema = new Schema<IUserDetails>({
         trim: true,
         minlegth: 1,
     },
-    mobileNum: {
+    mobilenum: {
         type: String,
         // required: true,
         unique: true,

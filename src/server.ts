@@ -27,6 +27,7 @@ const app = express();
 const sessionOptions = { mongoUrl: MONGO_URI || '', collectionName: 'sessions' };
 
 //Handlebars Setup
+app.set('views', getDirname(import.meta.url) + '/views'); // To include static HTML pages
 app.set('view engine', 'hbs');
 
 // ----> Express Middle-wares <-----

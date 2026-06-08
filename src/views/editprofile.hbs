@@ -4,27 +4,17 @@
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <title>Edit Profile - Lost & Found Center</title>
         <link rel='stylesheet' type='text/css' href='./css/editprofile.css' />
-        <link
-            rel='stylesheet'
-            type='text/css'
-            href='./css/editprofileresp.css'
-        />
+        <link rel='stylesheet' type='text/css' href='./css/editprofileresp.css' />
     </head>
     {{#if user}}
         <body>
             <div class='loginbox'>
                 <img src='./images/logo/avatar2.jpg' class='avatar' />
                 <h1>Edit Profile</h1>
-                <form method='POST' action='editprofile'>
+                <form method='POST' action='/editprofile'>
 
                     <p>Name</p>
-                    <input
-                        id='name'
-                        name='name'
-                        class='form-control'
-                        type='text'
-                        value='{{{user.name}}}'
-                    />
+                    <input id='name' name='name' class='form-control' type='text' value='{{{user.name}}}' />
 
                     {{! <p>E-mail</p>
                 <input type="email" name="email" class="form-control" placeholder="email@example.com" id="email">  
@@ -100,8 +90,7 @@
                         rows='1'
                     >{{{user.address}}}</textarea>
 
-                    <p>Select a Security Question, in case if you forget your
-                        credentials:</p>
+                    <p>Select a Security Question, in case if you forget your credentials:</p>
                     <select name='sec_que' id='sec_que'>
                         <option value='1'>Your Elementry School Name</option>
                         <option value='2'>Your Car Number</option>
@@ -124,8 +113,7 @@
             </div>
         </body>
         <script>
-            let state ={{{user.state}}}; console.log(state);
-            document.getElementById(state.toString()).innerText =
+            let state ={{{user.state}}}; console.log(state); document.getElementById(state.toString()).innerText =
             'stateasdfasdf'
         </script>
     {{else}}
@@ -136,12 +124,7 @@
                 <form method='POST' action='editprofile'>
 
                     <p>Name</p>
-                    <input
-                        id='name'
-                        name='name'
-                        class='form-control'
-                        type='text'
-                    />
+                    <input id='name' name='name' class='form-control' type='text' />
 
                     {{! <p>E-mail</p>
                 <input type="email" name="email" class="form-control" placeholder="email@example.com" id="email">  
@@ -150,13 +133,7 @@
                 <input type="password" name="password" name="" placeholder="Enter password"> }}
 
                     <p>Mobile Number</p>
-                    <input
-                        type='text'
-                        name='mobile'
-                        class='form-control'
-                        placeholder='Mobile No.'
-                        id='mobile'
-                    />
+                    <input type='text' name='mobile' class='form-control' placeholder='Mobile No.' id='mobile' />
 
                     <p>State</p>
                     <br />
@@ -208,16 +185,9 @@
                     </select>
 
                     <p>Full Address</p>
-                    <textarea
-                        class='form-control'
-                        name='address'
-                        id='add'
-                        cols='30'
-                        rows='1'
-                    ></textarea>
+                    <textarea class='form-control' name='address' id='add' cols='30' rows='1'></textarea>
 
-                    <p>Select a Security Question, in case if you forget your
-                        credentials:</p>
+                    <p>Select a Security Question, in case if you forget your credentials:</p>
                     <select name='sec_que' id='sec_que'>
                         <option value='1'>Your Elementry School Name</option>
                         <option value='2'>Your Car Number</option>
@@ -239,8 +209,7 @@
             </div>
         </body>
         <script>
-            let state ={{{user.state}}}; console.log(state);
-            document.getElementById(state.toString()).innerText =
+            let state ={{{user.state}}}; console.log(state); document.getElementById(state.toString()).innerText =
             'stateasdfasdf'
         </script>
     {{/if}}

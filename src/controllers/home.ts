@@ -34,12 +34,12 @@ async function getHome(req: Request, res: Response) {
     }
 
     if (!userDetails) {
-        return res.redirect('home');
+        return res.redirect('/editprofile');
     }
 
     return res.render('home', {
         name: userDetails.name,
-        mobilenum: userDetails.mobileNum,
+        mobilenum: userDetails.mobilenum,
         address: userDetails.address,
         email: user.email,
     });

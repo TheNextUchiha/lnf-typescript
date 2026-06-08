@@ -43,7 +43,20 @@ async function postEditProfile(req: Request, res: Response) {
     }
 
     if (!user) {
-        const userDetails = new UserDetails({
+        return res.redirect('/');
+    }
+
+    let userDetails;
+
+    try {
+        userDetails = await UserDetails.findOne({ userID });
+    } catch (err) {
+        console.log('ERROR: ', err);
+        return res.redirect('editprofile');
+    }
+
+    if (!userDetails) {
+        userDetails = new UserDetails({
             userID: user._id,
             name: name,
             mobilenum: mobile,
@@ -65,28 +78,15 @@ async function postEditProfile(req: Request, res: Response) {
                     counter: 1,
                 },
             });
-
-            res.redirect('home');
         } catch (err) {
             return res.redirect('login');
         }
-    }
 
-    let userDetails;
-
-    try {
-        userDetails = await UserDetails.findOne({ userID });
-    } catch (err) {
-        console.log('ERROR: ', err);
-        return res.redirect('editprofile');
-    }
-
-    if (!userDetails) {
-        return;
+        return res.redirect('home');
     }
 
     userDetails.name = name ? name : userDetails.name;
-    userDetails.mobileNum = mobile ? mobile : userDetails.mobileNum;
+    userDetails.mobilenum = mobile ? mobile : userDetails.mobilenum;
     userDetails.state = state ? state : userDetails.state;
     userDetails.address = address ? address : userDetails.address;
     userDetails.sec_que = sec_que ? sec_que : userDetails.sec_que;
